@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     public List<PhaseSO> phaseList;
     private int enemyLeftToSpawn;
     public AudioSource audioSource;
+    public bool isGameOver;
+    public CanvasGroup gameOverCanvas;
     
 
     [Space]
@@ -62,28 +65,44 @@ public class GameManager : MonoBehaviour
     }
 
    
-    public void CheckSpawn(int _phasenumber)
+    public void Retry()
     {
+        foreach (Transform child in bulletContainer)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in enemyContainer)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in particlesContainer)
+        {
+            Destroy(child.gameObject);
+        }
         
+        score = 0;
+        player.currenthealth = 3;
+        player.ship.SetActive(true);
+        player.leftShipSection.SetActive(true);
+        player.rightShipSection.SetActive(true);
+        player.isLeftFireEnabled = false;
+        player.isRightFireEnabled = false;
+        gameOverCanvas.alpha = 0;
+        Time.timeScale = 1;
+        EnablePhase(0);
+        isGameOver = false;
     }
 
     public void EnablePhase(int _phasenumber)
     {
-        if (_phasenumber >4)
-        {
-            //Easter Eggs Victory Screen
-            //t'as fini bg
-        }
-        else
-        {
-            enemyLeftToSpawn = phaseList[_phasenumber].enemyQty;
-            Debug.Log("Phase " + _phasenumber + " � d�but�");
-            SetArenaPattern(_phasenumber);
-            Debug.Log(phaseList[_phasenumber].track);
-            AudioManager.am.Mute(phaseList[_phasenumber].track, false);
-            AddPowerUp(_phasenumber);
-            StartCoroutine(SpawnPhaseWaves(_phasenumber));
-        }
+        
+         enemyLeftToSpawn = phaseList[_phasenumber].enemyQty;
+         Debug.Log("Phase " + _phasenumber + " � d�but�");
+        SetArenaPattern(_phasenumber);
+         Debug.Log(phaseList[_phasenumber].track);
+        AudioManager.am.Mute(phaseList[_phasenumber].track, false);
+        AddPowerUp(_phasenumber);
+        StartCoroutine(SpawnPhaseWaves(_phasenumber));
     }
     private void SetArenaPattern(int _phasenumber)
     {
@@ -119,6 +138,9 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < phaseList[_phasenumber].spawnProgression.Count; i++)
         {
+            if (isGameOver)
+                break;
+            
             UpdateSpawnerList();
             SpawnRandomly(phaseList[_phasenumber].spawnProgression[i],_phasenumber);
             yield return new WaitForSeconds(timeBetweenWaves);
@@ -138,7 +160,8 @@ public class GameManager : MonoBehaviour
     }
     public void SpawnRandomly(int _waveQty,int _phasenumber)
     {
-        
+        if (isGameOver)
+            return;
         if (_waveQty<= availableSpawners.Count)
         {
             List<int> randomizator = new List<int>();
@@ -158,7 +181,7 @@ public class GameManager : MonoBehaviour
             {
                 Instantiate(enemyprefab, availableSpawners[randomizator[i]].transform.position, Quaternion.identity, enemyContainer);
                 enemyLeftToSpawn--;
-                if (enemyLeftToSpawn == 0)
+                if (enemyLeftToSpawn == 0 )
                 {
                     EnablePhase(_phasenumber + 1);
                 }
@@ -170,11 +193,13 @@ public class GameManager : MonoBehaviour
             
             int spawnsToDelay = _waveQty - availableSpawners.Count;
             phaseList[_phasenumber].spawnProgression.Add(spawnsToDelay);
+
             for (int i = 0; i < availableSpawners.Count; i++)
             {
+                
                 Instantiate(enemyprefab, availableSpawners[i].transform.position, Quaternion.identity, enemyContainer);
                 enemyLeftToSpawn--;
-                if (enemyLeftToSpawn == 0)
+                if (enemyLeftToSpawn == 0 )
                 {
                     EnablePhase(_phasenumber + 1);
                 }

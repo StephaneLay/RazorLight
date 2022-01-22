@@ -79,6 +79,14 @@ public class PlayerController : MonoBehaviour
         rumble = GetComponent<Rumble>();
         
     }
+    public void InitPlayer()
+    {
+        rb = GetComponent<Rigidbody>();
+        mainCamera = GameManager.gm.mainCamera;
+        playerInput = GetComponent<PlayerInput>();
+        currenthealth = maxHealth;
+        rumble = GetComponent<Rumble>();
+    }
 
     public void Update()
     {
@@ -245,12 +253,12 @@ public class PlayerController : MonoBehaviour
                 particle = (GameObject)Instantiate(GameManager.gm.explosionParticles, leftShipSection.transform.position, Quaternion.identity, GameManager.gm.particlesContainer);
                 particle.GetComponent<ExplosionFXComponent>().Init(glowMaterial.GetColor("_ColorGlow"), lifetime);
 
-                Destroy(leftShipSection);
+                leftShipSection.SetActive(false);
                 break;
             case 1:
                 particle = (GameObject)Instantiate(GameManager.gm.explosionParticles, rightShipSection.transform.position, Quaternion.identity, GameManager.gm.particlesContainer);
                 particle.GetComponent<ExplosionFXComponent>().Init(glowMaterial.GetColor("_ColorGlow"), lifetime);
-                Destroy(rightShipSection);
+                rightShipSection.SetActive(false);
                 break;
             case 0:
 
@@ -293,6 +301,7 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator GameOver()
     {
+        GameManager.gm.isGameOver = true;
         GameObject particle;
         particle = (GameObject)Instantiate(GameManager.gm.explosionParticles, transform.position, Quaternion.identity, GameManager.gm.particlesContainer);
         particle.GetComponent<ExplosionFXComponent>().Init(glowMaterial.GetColor("_ColorGlow"), lifetime);

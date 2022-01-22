@@ -812,6 +812,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1096530457569410292, guid: 3dd7d302a82407546b3172e74616f14b, type: 3}
+      propertyPath: maxBulletBounces
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1096530457569410315, guid: 3dd7d302a82407546b3172e74616f14b, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -3962,7 +3966,11 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 743343996}
   m_Enabled: 1
+<<<<<<< Updated upstream
   m_Alpha: 1
+=======
+  m_Alpha: 0
+>>>>>>> Stashed changes
   m_Interactable: 1
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -4028,7 +4036,11 @@ MonoBehaviour:
   best2Default: 0
   best3: {fileID: 278260943}
   best3Default: 0
+<<<<<<< Updated upstream
   firstSelected: {fileID: 0}
+=======
+  firstSelected: {fileID: 902116195}
+>>>>>>> Stashed changes
   colors:
   - {r: 1, g: 0.8627451, b: 0.24313726, a: 1}
   - {r: 0.90588236, g: 0.90588236, b: 0.90588236, a: 1}
@@ -4778,9 +4790,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 222386177}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: Resume
+      - m_Target: {fileID: 1201242805}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: Retry
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5941,6 +5953,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 882acd999adb99846a36340ddcd80903, type: 2}
   - {fileID: 11400000, guid: 5bf5c73dcc6e3a5488a8645e4d2612e0, type: 2}
   audioSource: {fileID: 0}
+  isGameOver: 0
+  gameOverCanvas: {fileID: 743343998}
   particlesContainer: {fileID: 655940857}
   explosionParticles: {fileID: 514707653747520317, guid: cb5d17861dc56244a980ae8899b990c8, type: 3}
   spawnerContainer: {fileID: 503800668}
